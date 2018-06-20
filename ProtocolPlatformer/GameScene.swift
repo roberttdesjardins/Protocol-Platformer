@@ -63,34 +63,40 @@ class GameScene: SKScene {
 
 
 protocol Entity {
-    var name: String { get }
+    static func uid() -> String
     var hasHealth: Bool { get }
     var canMove: Bool { get }
     var canAttack: Bool { get }
 }
 
+extension SKSpriteNode: Entity { }
+
 extension Entity {
+    static func uid() -> String {
+        return UUID().uuidString
+    }
     var hasHealth: Bool { return self is HasHealth}
     var canMove: Bool { return (self is CanFly) || (self is CanWalk)}
     var canAttack: Bool { return self is CanAttack}
 }
 
 
-protocol HasHealth {
+protocol HasHealth: Entity {
     var health: Double { get }
 }
 
-protocol CanFly {
+
+protocol CanFly: Entity {
     var flySpeed: Double { get }
     func fly()
 }
 
-protocol CanWalk {
+protocol CanWalk: Entity {
     var walkSpeed: Double { get }
     func walk()
 }
 
-protocol CanAttack {
+protocol CanAttack: Entity {
     var attacks: [Attack] { get }
     func attack()
 }
@@ -101,9 +107,40 @@ struct Attack {
     var attackFrequency: TimeInterval
 }
 
+class sky: SKSpriteNode, CanFly {
+    private var skyHeight: CGFloat = 0.0
+    private var skyWidth: CGFloat = 0.0
+    func initSky() {
+        skyHeight = GameData.shared.deviceHeight
+        skyWidth = skyHeight * 0.3684
+    }
+    
+    var flySpeed: Double = 0.0
+    
+    
+    
+    func fly() {
+        print("Sky trying to move")
+    }
+    
+    
+}
+
+class Platform: SKSpriteNode, CanFly {
+    
+    var flySpeed: Double = 0.0
+    
+    func fly() {
+        // TODO
+        print("Platform trying to move")
+    }
+    
+    
+}
+
 struct Player: Entity, HasHealth, CanWalk, CanAttack {
     
-    var name: String
+    var id: String
     
     var health: Double
     
@@ -112,11 +149,13 @@ struct Player: Entity, HasHealth, CanWalk, CanAttack {
     var attacks: [Attack]
     
     func attack() {
-        <#code#>
+        // TODO
+        print("Player trying to attack")
     }
     
     func walk() {
-        <#code#>
+        // TODO
+        print("Player trying to walk")
     }
 }
 
@@ -126,16 +165,18 @@ let demonAttacks: [Attack] = [demonFire, demonCharge]
 
 struct Demon: Entity, HasHealth, CanFly, CanAttack {
     
-    let name: String
+    let id: String
     var health: Double
     var attacks: [Attack] { return demonAttacks }
     var flySpeed: Double { return 10 }
     
     func attack() {
+        // TODO
         print("Demon choosing an attack from \(attacks)")
     }
     
     func fly() {
+        // TODO
         print("Demon Flying at a speed of \(flySpeed)")
     }
 }

@@ -15,6 +15,7 @@
 		553ECAE320DAF9E2001AC43D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 553ECAE120DAF9E2001AC43D /* LaunchScreen.storyboard */; };
 		553ECAEE20DAF9E2001AC43D /* ProtocolPlatformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553ECAED20DAF9E2001AC43D /* ProtocolPlatformerTests.swift */; };
 		553ECAF920DAF9E2001AC43D /* ProtocolPlatformerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553ECAF820DAF9E2001AC43D /* ProtocolPlatformerUITests.swift */; };
+		553ECB0720DB04F1001AC43D /* GameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553ECB0620DB04F1001AC43D /* GameData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		553ECAF420DAF9E2001AC43D /* ProtocolPlatformerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ProtocolPlatformerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		553ECAF820DAF9E2001AC43D /* ProtocolPlatformerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtocolPlatformerUITests.swift; sourceTree = "<group>"; };
 		553ECAFA20DAF9E2001AC43D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		553ECB0620DB04F1001AC43D /* GameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				553ECADF20DAF9E2001AC43D /* Assets.xcassets */,
 				553ECAE120DAF9E2001AC43D /* LaunchScreen.storyboard */,
 				553ECAE420DAF9E2001AC43D /* Info.plist */,
+				553ECB0620DB04F1001AC43D /* GameData.swift */,
 			);
 			path = ProtocolPlatformer;
 			sourceTree = "<group>";
@@ -260,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				553ECAD920DAF9E0001AC43D /* GameScene.swift in Sources */,
+				553ECB0720DB04F1001AC43D /* GameData.swift in Sources */,
 				553ECADB20DAF9E0001AC43D /* GameViewController.swift in Sources */,
 				553ECAD320DAF9E0001AC43D /* AppDelegate.swift in Sources */,
 			);
