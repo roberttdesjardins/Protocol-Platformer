@@ -9,16 +9,65 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+let worldNode = SKNode()
+
+// Background
+var skyArr: [Sky] = []
+var cloudArr: [Cloud] = []
+var seaArr: [Sea] = []
+
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private var lastUpdateTime : TimeInterval = 0
     
+    
     override func sceneDidLoad() {
+        addChild(worldNode)
+        physicsWorld.contactDelegate = self
         self.lastUpdateTime = 0
+        setUpBackground()
+    }
+    
+    func setUpBackground() {
+        setUpSky()
+    }
+    
+    func setUpSky() {
+        var skyCount = 0
+        let skyWidth = SkyAttributes().getSkyWidth()
+        while CGFloat(skyArr.count) * skyWidth < GameData.shared.deviceWidth * 1.5 {
+            let sky = Sky(imageNamed: "sky")
+            sky.initSky()
+            sky.position = CGPoint(x: skyCount * Int(skyWidth), y: 0)
+            worldNode.addChild(sky)
+            skyArr.append(sky)
+            skyCount += 1
+        }
+    }
+    
+    func setUpClouds() {
+        
+    }
+    
+    func setUpSea() {
+        
+    }
+    
+    func updateBackgroud() {
+        for element in skyArr {
+            element.fly()
+        }
+        for element in cloudArr {
+            element.fly()
+        }
+        for element in seaArr {
+            element.fly()
+        }
     }
     
     
     func touchDown(atPoint pos : CGPoint) {
+        print("touched down")
     }
     
     func touchMoved(toPoint pos : CGPoint) {
@@ -53,6 +102,8 @@ class GameScene: SKScene {
             self.lastUpdateTime = currentTime
         }
         
+        updateBackgroud()
+        
         // Calculate time since last update
         let dt = currentTime - self.lastUpdateTime
         
@@ -61,6 +112,13 @@ class GameScene: SKScene {
     }
 }
 
+
+func moveAlong(element: SKSpriteNode, array: [SKSpriteNode], speed: CGFloat) {
+    element.position = CGPoint(x: element.position.x - speed, y: element.position.y)
+    if element.position.x <= -element.size.width {
+        element.position.x = array[ (array.index(of: element)! + array.count - 1) % array.count].position.x + element.size.width - 1
+    }
+}
 
 protocol Entity {
     static func uid() -> String
@@ -87,12 +145,12 @@ protocol HasHealth: Entity {
 
 
 protocol CanFly: Entity {
-    var flySpeed: Double { get }
+    var flySpeed: CGFloat { get }
     func fly()
 }
 
 protocol CanWalk: Entity {
-    var walkSpeed: Double { get }
+    var walkSpeed: CGFloat { get }
     func walk()
 }
 
@@ -107,20 +165,64 @@ struct Attack {
     var attackFrequency: TimeInterval
 }
 
-class sky: SKSpriteNode, CanFly {
-    private var skyHeight: CGFloat = 0.0
-    private var skyWidth: CGFloat = 0.0
+//protocol SkyAttributes {
+//    var skyHeight: CGFloat { get }
+//    var skyWidth: CGFloat { get }
+//}
+//
+//extension SkyAttributes {
+//    var skyHeight: CGFloat { return GameData.shared.deviceHeight }
+//    var skyWidth: CGFloat { return skyHeight * 0.3684 }
+//}
+
+struct SkyAttributes {
+    func getSkyHeight() -> CGFloat {
+        return GameData.shared.deviceHeight
+    }
+    func getSkyWidth() -> CGFloat {
+        return getSkyHeight() * GameData.shared.skyHeightToWidthRatio
+    }
+}
+
+class Sky: SKSpriteNode, CanFly {
     func initSky() {
-        skyHeight = GameData.shared.deviceHeight
-        skyWidth = skyHeight * 0.3684
+        anchorPoint = CGPoint(x: 0, y: 0)
+        zPosition = -15
+        size.width = SkyAttributes().getSkyWidth()
+        size.height = SkyAttributes().getSkyHeight()
     }
     
-    var flySpeed: Double = 0.0
-    
-    
+    var flySpeed: CGFloat = 1.0
     
     func fly() {
         print("Sky trying to move")
+        moveAlong(element: self, array: skyArr, speed: flySpeed)
+    }
+}
+
+class Cloud: SKSpriteNode, CanFly {
+    // TODO
+    func initCloud() {
+        anchorPoint = CGPoint(x: 0, y: 0)
+        zPosition = -14
+        
+    }
+    
+    var flySpeed: CGFloat = 0.5
+    
+    func fly() {
+        
+    }
+    
+    
+}
+
+class Sea: SKSpriteNode, CanFly {
+    // TODO
+    var flySpeed: CGFloat = 0.4
+    
+    func fly() {
+        
     }
     
     
@@ -128,7 +230,7 @@ class sky: SKSpriteNode, CanFly {
 
 class Platform: SKSpriteNode, CanFly {
     
-    var flySpeed: Double = 0.0
+    var flySpeed: CGFloat = 0.0
     
     func fly() {
         // TODO
@@ -144,7 +246,7 @@ struct Player: Entity, HasHealth, CanWalk, CanAttack {
     
     var health: Double
     
-    var walkSpeed: Double
+    var walkSpeed: CGFloat
     
     var attacks: [Attack]
     
@@ -168,7 +270,7 @@ struct Demon: Entity, HasHealth, CanFly, CanAttack {
     let id: String
     var health: Double
     var attacks: [Attack] { return demonAttacks }
-    var flySpeed: Double { return 10 }
+    var flySpeed: CGFloat { return 10 }
     
     func attack() {
         // TODO
