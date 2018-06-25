@@ -30,6 +30,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func setUpBackground() {
         setUpSky()
+        setUpCloud()
+        setUpSea()
     }
     
     func setUpSky() {
@@ -45,12 +47,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func setUpClouds() {
-        
+    func setUpCloud() {
+        var cloudCount = 0
+        let cloudWidth = CloudAttributes().getCloudWidth()
+        while CGFloat(cloudArr.count) * cloudWidth < GameData.shared.deviceWidth * 2.0 {
+            let cloud = Cloud(imageNamed: "clouds")
+            cloud.initCloud()
+            cloud.position = CGPoint(x: cloudCount * Int(cloudWidth), y: 0)
+            worldNode.addChild(cloud)
+            cloudArr.append(cloud)
+            cloudCount += 1
+        }
     }
     
     func setUpSea() {
-        
+        var seaCount = 0
+        let seaWidth = SeaAttributes().getSeaWidth()
+        while CGFloat(seaArr.count) * seaWidth < GameData.shared.deviceWidth * 1.7 {
+            let sea = Sea(imageNamed: "sea")
+            sea.initSea()
+            sea.position = CGPoint(x: seaCount * Int(seaWidth), y: 0)
+            worldNode.addChild(sea)
+            seaArr.append(sea)
+            seaCount += 1
+        }
     }
     
     func updateBackgroud() {
@@ -165,22 +185,30 @@ struct Attack {
     var attackFrequency: TimeInterval
 }
 
-//protocol SkyAttributes {
-//    var skyHeight: CGFloat { get }
-//    var skyWidth: CGFloat { get }
-//}
-//
-//extension SkyAttributes {
-//    var skyHeight: CGFloat { return GameData.shared.deviceHeight }
-//    var skyWidth: CGFloat { return skyHeight * 0.3684 }
-//}
-
 struct SkyAttributes {
     func getSkyHeight() -> CGFloat {
         return GameData.shared.deviceHeight
     }
     func getSkyWidth() -> CGFloat {
         return getSkyHeight() * GameData.shared.skyHeightToWidthRatio
+    }
+}
+
+struct CloudAttributes {
+    func getCloudHeight() -> CGFloat {
+        return GameData.shared.deviceHeight * (3/4)
+    }
+    func getCloudWidth() -> CGFloat {
+        return getCloudHeight() * GameData.shared.cloudHeightToWidthRatio
+    }
+}
+
+struct SeaAttributes {
+    func getSeaHeight() -> CGFloat {
+        return GameData.shared.deviceHeight * (7/24)
+    }
+    func getSeaWidth() -> CGFloat {
+        return getSeaHeight() * GameData.shared.seaHeightToWidthRatio
     }
 }
 
@@ -219,6 +247,10 @@ class Cloud: SKSpriteNode, CanFly {
 
 class Sea: SKSpriteNode, CanFly {
     // TODO
+    func initSea() {
+        
+    }
+    
     var flySpeed: CGFloat = 0.4
     
     func fly() {

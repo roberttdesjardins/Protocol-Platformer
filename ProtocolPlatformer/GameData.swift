@@ -18,6 +18,8 @@ class GameData {
     var deviceHeight = UIScreen.main.bounds.size.height
 
     var skyHeightToWidthRatio: CGFloat = 0.3684
+    var cloudHeightToWidthRatio: CGFloat = 2.3050
+    var seaHeightToWidthRatio: CGFloat = 1.166
     
     let playerName = "player"
     let playerSize = CGSize(width: 40, height: 40) // TODO: Change based on screen size
